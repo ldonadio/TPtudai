@@ -5,47 +5,36 @@ function getInformationByGroup(){
      method: "GET",
      dataType: 'JSON',
      url: "https://web-unicen.herokuapp.com/api/thing/group/" + grupo,
-     success: function(resultData){
-       //al ser tipo JSON resultData es un objeto listo para usar
-       console.log(resultData);
-       let html = "";
-       for (let i = 0; i < resultData.information.length; i++) {
-         html += "<tr> <td>" + resultData.information[i].dateAdded + "</td>";
-         html += "<td>" + resultData.information[i].thing['articulo'] + "</td>";
-         html += "<td>" + resultData.information[i].thing['precio'] + "</td>";
-         html += "<td>" + resultData.information[i].thing['lugar'] + "</td> </tr>";
-      }
-       $("#datos").html(html);
-     },
+     success: mostrarDatosLista,
      error:function(jqxml, status, errorThrown){
        console.log(errorThrown);
      }
   });
 }
 
-function getInformationByItem(){
-  event.preventDefault();
-  let item = $("#itemid").val();
-  $.ajax({
-     method: "GET",
-     dataType: 'JSON',
-     //si la info va en la URL o se pasa por "data" depende del servicio
-     url: "https://web-unicen.herokuapp.com/api/thing/" + item,
-     success: function(resultData){
-       //al decir que dataType es JSON, ya resultData es un objeto
-       let html = "";
-       html += "Id: " + resultData.information['_id'] + "<br />";
-       html += "Grupo: " + resultData.information['group'] + "<br />";
-       html += "Informacion: " + resultData.information['thing'] + "<br />";
-       html += "--------------------- </br>";
-       $("#infoItem").html(html);
-     },
-     error:function(jqxml, status, errorThrown){
-       console.log(errorThrown);
-     }
-
-  });
-}
+// function getInformationByItem(){
+//   event.preventDefault();
+//   let item = $("#itemid").val();
+//   $.ajax({
+//      method: "GET",
+//      dataType: 'JSON',
+//      //si la info va en la URL o se pasa por "data" depende del servicio
+//      url: "https://web-unicen.herokuapp.com/api/thing/" + item,
+//      success: function(resultData){
+//        //al decir que dataType es JSON, ya resultData es un objeto
+//        let html = "";
+//        html += "Id: " + resultData.information['_id'] + "<br />";
+//        html += "Grupo: " + resultData.information['group'] + "<br />";
+//        html += "Informacion: " + resultData.information['thing'] + "<br />";
+//        html += "--------------------- </br>";
+//        $("#infoItem").html(html);
+//      },
+//      error:function(jqxml, status, errorThrown){
+//        console.log(errorThrown);
+//      }
+//
+//   });
+// }
 
 function guardarInformacion(){
   event.preventDefault();
@@ -69,14 +58,7 @@ function guardarInformacion(){
        data: JSON.stringify(info),
        contentType: "application/json; charset=utf-8",
        url: "https://web-unicen.herokuapp.com/api/thing",
-       success: function(resultData){
-         $("#guardarAlert").removeClass("alert-danger")
-         $("#guardarAlert").addClass("alert-success")
-         //como le dimos dataType:"JSON" el resultData ya es un objeto
-         //la estructura que devuelve es especifica de cada servicio que usemos
-         $("#guardarAlert").html("Informacion guardada con ID=" + resultData.information._id);
-         console.log(resultData);
-       },
+       success: CargaOK,
        error:function(jqxml, status, errorThrown){
          console.log(errorThrown);
          $("#guardarAlert").addClass("alert-danger")
@@ -89,4 +71,26 @@ function guardarInformacion(){
     $("#guardarAlert").addClass("alert-danger")
     $("#guardarAlert").html("Grupo e Informacion son campos requeridos");
   }
+}
+
+function mostrarDatosLista(resultData){
+  alert("entro por aca");
+  let html = "";
+  for (let i = 0; i < resultData.information.length; i++) {
+    html += "<tr> <td>" + resultData.information[i].dateAdded + "</td>";
+    html += "<td>" + resultData.information[i].thing['articulo'] + "</td>";
+    html += "<td>" + resultData.information[i].thing['precio'] + "</td>";
+    html += "<td>" + resultData.information[i].thing['lugar'] + "</td> </tr>";
+ }
+  $("#datos").html(html);
+}
+
+function CargaOK(resultData){
+  $("#guardarAlert").removeClass("alert-danger")
+  $("#guardarAlert").addClass("alert-success")
+  //como le dimos dataType:"JSON" el resultData ya es un objeto
+  //la estructura que devuelve es especifica de cada servicio que usemos
+  $("#guardarAlert").html("Informacion guardada con ID=" + resultData.information._id);
+  getInformationByGroup();
+  console.log(datos);
 }
