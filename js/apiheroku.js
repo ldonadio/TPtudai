@@ -1,20 +1,21 @@
 function getInformationByGroup(){
   event.preventDefault();
-  let grupo = $("#groupid").val();
+  let grupo = 101; //Se lo deja constante en el grupo de prueba $("#groupid").val();
   $.ajax({
      method: "GET",
      dataType: 'JSON',
      url: "https://web-unicen.herokuapp.com/api/thing/group/" + grupo,
      success: function(resultData){
        //al ser tipo JSON resultData es un objeto listo para usar
+       console.log(resultData);
        let html = "";
        for (let i = 0; i < resultData.information.length; i++) {
-         html += "Id: " + resultData.information[i]['_id'] + "<br />";
-         html += "Grupo: " + resultData.information[i]['group'] + "<br />";
-         html += "Informacion: " + resultData.information[i]['thing'] + "<br />";
-         html += "--------------------- <br />";
-       }
-       $("#infoGroup").html(html);
+         html += "<tr> <td>" + resultData.information[i].dateAdded + "</td>";
+         html += "<td>" + resultData.information[i].thing['articulo'] + "</td>";
+         html += "<td>" + resultData.information[i].thing['precio'] + "</td>";
+         html += "<td>" + resultData.information[i].thing['lugar'] + "</td> </tr>";
+      }
+       $("#datos").html(html);
      },
      error:function(jqxml, status, errorThrown){
        console.log(errorThrown);
@@ -60,7 +61,7 @@ function guardarInformacion(){
       thing: {"articulo": articulo, "precio": precio, "lugar": lugar} //es un objeto JSON!
       };
 
-  if (grupo && articulo && precio){
+  if (grupo && articulo && precio){ //lugar considero que puede ser vacio
     $.ajax({
        method: "POST",
        dataType: 'JSON',
