@@ -48,17 +48,19 @@ function getInformationByItem(){
 
 function guardarInformacion(){
   event.preventDefault();
-  let grupo = $("#grupo").val();
-  let informacion = $("#informacion").val();
+  let grupo = 101; //grupo seleccionado de forma estatica antes estaba $("#grupo").val();
+  let articulo = $("#articulo").val();
+  let precio = $("#precio").val();
+  let lugar = $("#lugar").val();
   //la estructura que debemos enviar es especifica de cada servicio que usemos
   //en este caso un hay que enviar un objeto con el numero de grupo y con lo que queramos guardarInformacion
   //thing puede ser un objeto JSON con tanta información como queramos (en este servicio)
   let info = {
       group: grupo,
-      thing: informacion //puede ser un objeto JSON!
+      thing: {"articulo": articulo, "precio": precio, "lugar": lugar} //es un objeto JSON!
       };
 
-  if (grupo && informacion){
+  if (grupo && articulo && precio){
     $.ajax({
        method: "POST",
        dataType: 'JSON',
