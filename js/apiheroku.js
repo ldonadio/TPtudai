@@ -74,9 +74,9 @@ function guardarInformacion(){
 }
 
 function mostrarDatosLista(resultData){
-  alert("entro por aca");
+  let ultimosDiez = 10; //Muestra las ultimas diez lineas de datos cargados en el Server
   let html = "";
-  for (let i = 0; i < resultData.information.length; i++) {
+  for (let i = resultData.information.length-ultimosDiez; i < resultData.information.length; i++) {
     html += "<tr> <td>" + resultData.information[i].dateAdded + "</td>";
     html += "<td>" + resultData.information[i].thing['articulo'] + "</td>";
     html += "<td>" + resultData.information[i].thing['precio'] + "</td>";
@@ -90,7 +90,7 @@ function CargaOK(resultData){
   $("#guardarAlert").addClass("alert-success")
   //como le dimos dataType:"JSON" el resultData ya es un objeto
   //la estructura que devuelve es especifica de cada servicio que usemos
-  $("#guardarAlert").html("Informacion guardada con ID=" + resultData.information._id);
+  $("#guardarAlert").html("Informacion guardada con fecha=" + resultData.information.dateAdded);
   getInformationByGroup();
   console.log(datos);
 }

@@ -1,5 +1,8 @@
- p {
-  color:red;
+.navbar-brand{
+  color: orange;
 }
-.fea {
-  background-color: green}
+
+#titulo1{
+  color: orange;
+  font-size: 20px;
+}
