@@ -2,10 +2,12 @@ $( document ).ready(function() {
 "use strict";
 
 //cargaDatosInicial();
-let ItemsInicio = 3;
 
-cargaDatosInicial(ItemsInicio);
-
+$("#guardar-info-rapida").on("click", function(){
+  event.preventDefault();
+  let ItemsInicio = 3;
+  cargaDatosInicial(ItemsInicio);
+})
 
 function cargaDatosInicial(Items){
  for (var i = 0; i < Items; i++) {
