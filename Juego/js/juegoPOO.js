@@ -82,6 +82,7 @@ class Partida {
   }
 class Torneo {
   constructor(){
+    this.cant_partidas_jugadas = 0;
     this.part_ganadas_Humano = 0;
     this.part_ganadas_maquina = 0;
     this.gano_anterior_H = 0;
@@ -126,7 +127,7 @@ class Torneo {
       if (this.part_ganadas_Humano>this.part_ganadas_maquina){
         alert("TONEO GANADO");
       }
-      else{
+      if (this.part_ganadas_Humano<this.part_ganadas_maquina){
         alert("TONEO PERDIDO");
       }
       this.part_ganadas_Humano = 0;
@@ -135,30 +136,6 @@ class Torneo {
   }
 }
 
-// class MejorDeTres {
-//   constructor(){
-//     this.part_ganadas_Humano = 0;
-//     this.part_ganadas_maquina = 0;
-//   }
-//   incrementarGanoMaq(){
-//     this.part_ganadas_maquina = this.part_ganadas_maquina++;
-//   }
-//   incrementarGanoHum(){
-//     this.part_ganadas_Humano = this.part_ganadas_Humano++;
-//   }
-//   evaluarMejorDe3(){
-//     if (this.part_ganadas_Humano===2){
-//         alert("MEJOR DE 3 GANADO");
-//         this.part_ganadas_Humano = 0;
-//         this.part_ganadas_maquina = 0;
-//       }
-//     if (this.part_ganadas_maquina===2){
-//         alert("MEJOR DE 3 PERDIDO");
-//         this.part_ganadas_Humano = 0;
-//         this.part_ganadas_maquina = 0;
-//       }
-//     }
-//   }
 
 //Inicio del Juego
 
@@ -179,16 +156,18 @@ $("#comenzar").on("click",function () {
     Torneo1.asignarModo('MejorDe3');
   }
   let html ="<form>Ingrese su opción de juego: <input type='text' id='opcion' value=''></form>";
-      html += "<img id='op_usuario' src='imagenes/signo.jpg' alt=''></img>";
-      html +="<p><button id = 'jugar'>Jugar</button></p>";
-      html +="<img id='opcion_pc' src='imagenes/signo.jpg' alt=''></img>"
+      html += "<table><tr><img id='op_usuario' src='imagenes/signo.jpg' alt=''></img>";
+      html +="<button id = 'jugar'>Jugar</button>";
+      html +="<img id='opcion_pc' src='imagenes/signo.jpg' alt=''></img></tr></table>";
+      html +="<table clase='tablero'><tr><td>Partidas jugadas</td><td>Partidas ganadas</td><td>Credito</td></tr>";
+      html +="<tr><td id='Partidas-jugadas'>X</td><td id='Partidas-ganadas'>X</td><td id='Credito'>X</td></tr></table>";
   $(".htmldinamico").html(html);
   $("#jugar").on("click",function(){
       event.preventDefault();
         if (Jugador1.ValidarOpcion($("#opcion").val())){
-            let maq = Maquina1.OpcionPartida();
-            let humano = $("#opcion").val();
-            let caso = Partida1.evaluarJuego(humano,maq);
+            let op_maq = Maquina1.OpcionPartida();
+            let op_humano = $("#opcion").val();
+            let caso = Partida1.evaluarJuego(op_humano,op_maq);
             switch (caso) {
                 case 0:
                     alert("EMPATE!!");
@@ -205,7 +184,10 @@ $("#comenzar").on("click",function () {
                     break;
                   default:
               }
-
+                Torneo1.cant_partidas_jugadas +=1;
+                $("#Partidas-jugadas").html(Torneo1.cant_partidas_jugadas);
+                $("#Partidas-ganadas").html(Torneo1.part_ganadas_Humano);
+                $("#Credito").html(Jugador1.credito);
                 Torneo1.evaluarTorneo();
 
 
