@@ -6,7 +6,7 @@ alert("Donadio esta programando cuidado!");
 class Jugador {
   constructor(nombre) {
     this.nombre= nombre; //Se puede llamar variable igual que la clase?
-    this.credito=100;
+    this.credito=10;
     this.part_ganadas=0;
     }
   darNombre(nom_nuevo){
@@ -17,6 +17,16 @@ class Jugador {
   }
   sumarCredito(){
     this.credito = this.credito+10;
+  }
+  ValidarCredito(){
+    let valida = 0;
+    if (this.credito>0){
+      this.valida = 1;
+    }
+    else{
+      alert("CREDITO INSUFICIENTE PARA JUGAR");
+    }
+    return this.valida;
   }
   ValidarOpcion(opcion){
     let valida = 0;
@@ -130,8 +140,11 @@ class Torneo {
       if (this.part_ganadas_Humano<this.part_ganadas_maquina){
         alert("TONEO PERDIDO");
       }
+      this.cant_partidas_jugadas = 0;
       this.part_ganadas_Humano = 0;
       this.part_ganadas_maquina = 0;
+      this.gano_anterior_H = 0;
+      this.gano_anterior_M = 0;
     }
   }
 }
@@ -156,17 +169,20 @@ $("#comenzar").on("click",function () {
     Torneo1.asignarModo('MejorDe3');
   }
   let html ="<form>Ingrese su opción de juego: <input type='text' id='opcion' value=''></form>";
-      html += "<table><tr><img id='op_usuario' src='imagenes/signo.jpg' alt=''></img>";
+      html += "<table><tr><img id='op-usuario' src='imagenes/signo.jpg' alt=''></img>";
       html +="<button id = 'jugar'>Jugar</button>";
-      html +="<img id='opcion_pc' src='imagenes/signo.jpg' alt=''></img></tr></table>";
+      html +="<img id='opcion-pc' src='imagenes/signo.jpg' alt=''></img></tr></table>";
       html +="<table clase='tablero'><tr><td>Partidas jugadas</td><td>Partidas ganadas</td><td>Credito</td></tr>";
       html +="<tr><td id='Partidas-jugadas'>X</td><td id='Partidas-ganadas'>X</td><td id='Credito'>X</td></tr></table>";
   $(".htmldinamico").html(html);
+
   $("#jugar").on("click",function(){
       event.preventDefault();
-        if (Jugador1.ValidarOpcion($("#opcion").val())){
+        if (Jugador1.ValidarOpcion($("#opcion").val()) && (Jugador1.ValidarCredito()===1)){
             let op_maq = Maquina1.OpcionPartida();
             let op_humano = $("#opcion").val();
+            $("#opcion-pc").attr("src","imagenes/"+op_maq+".jpg");
+            $("#op-usuario").attr("src","imagenes/"+op_humano+".jpg");
             let caso = Partida1.evaluarJuego(op_humano,op_maq);
             switch (caso) {
                 case 0:

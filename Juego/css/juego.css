@@ -2,13 +2,14 @@ body{
   background-color: white;
 }
 h1{
-  color: orange;
+  color: blue;
   font-size: 45px;
 }
 .container{
   text-align: center;
 }
 button{
+  margin:20px;
   padding: 10px;
 }
 input{
