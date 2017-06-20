@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>A Jugar se ha dicho</title>
+  <link href="css/juego.css" rel="stylesheet">
+</head>
+
+<body>
+<!--REQUISITOS-->
+<!--1- usando un campo de texto (donde ingresa piedra, papel o tijera textualmente).-->
+<!--2- Elige una vez papel, a la siguiente tijera y a la siguiente piedra (y así sucesivamente)-->
+<!--2- Cada 3 partidas ganadas por el humano muestra un “alert” felicitándolo.
+-->
+<div class="container">
+  <h1>Juguemos a piedra, papel, tijera, lagarto, Spock!</h1>
+  <img src="imagenes/images.jpg" alt="Piedra, papel, tijera, lagarto, spock"/>
+  <div>
+    <form action="">
+      <h3>Jugar</h3>
+      <label>Torneo a:</label><input type="text" id="cant_partidas"><label>partidas</label>
+      <input type="radio" name="selec" value="Simple"> Simple o por
+      <input type="radio" name="selec" value="MejorDe3"> Mejor de 3
+      <button id = "comenzar">Comenzar</button>
+    </form>
+  </div>
+  <div class="htmldinamico">
+  </div>
+</div>
+
+<!-- <script
+src="https://code.jquery.com/jquery-3.2.1.min.js"
+integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+crossorigin="anonymous"></script> -->
+<script type="text/javascript" src="js/jquery.lib.js"></script>
+<script type="text/javascript" src="js/juegoPOO.js"></script>
+
+</body>
+</html>

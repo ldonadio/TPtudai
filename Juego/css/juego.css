@@ -1,0 +1,16 @@
+body{
+  background-color: white;
+}
+h1{
+  color: orange;
+  font-size: 45px;
+}
+.container{
+  text-align: center;
+}
+button{
+  padding: 10px;
+}
+input{
+  margin: 10px;
+}
