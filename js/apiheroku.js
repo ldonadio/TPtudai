@@ -65,11 +65,11 @@ function GuardarInformacion(articulo,precio,lugar){
        //se debe serializar (stringify) la informacion (el "data:" de ida es de tipo string)
        data: JSON.stringify(info),
        contentType: "application/json; charset=utf-8",
-       url: "https://web-unicen.herokuapp.com/api/thing",
+       url: "https://web-unicen.herokuapp.com/api/thing/",
        success: CargaOK,
        error:function(jqxml, status, errorThrown){
          console.log(errorThrown);
-         $("#guardarAlert").addClass("alert-danger")
+         $("#guardarAlert").addClass("alert-danger");
          $("#guardarAlert").html("Error por favor intente mas tarde");
        }
     });
@@ -81,16 +81,34 @@ function GuardarInformacion(articulo,precio,lugar){
   }
 }
 
+function BorrarDatos(id) {
+    event.preventDefault();
+    $.ajax({
+      method: "DELETE",
+      dataType: 'JSON',
+      url:  "https://web-unicen.herokuapp.com/api/thing/"+id,
+      success: function(){$("#guardarAlert").html("Borrado Existoso");
+                $('tr[data-id="'+id+'"]').remove()},//Busca elemento del DOM con data-id = y lo remueve
+      error: $("#guardarAlert").html("Error por favor intente mas tarde")
+    });
+}
+
 function mostrarDatosLista(data, filas){
   let ultimosItems = filas; //Muestra las ultimas XX lineas de datos cargados en el Server
   let html = ""; //HTML dinamico que se carga con los datos traidos en resultData
   for (let i = data.information.length-ultimosItems; i < data.information.length; i++) {
-    html += "<tr> <td>" + data.information[i].dateAdded + "</td>";
+    html +=  "<tr data-id='"+data.information[i]._id+"'><td>" + data.information[i].dateAdded + "</td>";
     html += "<td>" + data.information[i].thing['articulo'] + "</td>";
     html += "<td>" + data.information[i].thing['precio'] + "</td>";
-    html += "<td>" + data.information[i].thing['lugar'] + "</td> </tr>";
+    html += "<td>" + data.information[i].thing['lugar'] + "</td>";
+    html += "<td id='borrar'>  <a href="+'""#""'+" id='boton-borrar' onclick='return false;'><img src='imagenes/tacho.jpg'></a> </td> </tr>";
  }
   $("#datos").html(html);
+
+  $("#boton-borrar").on("click", function(){
+    let id = $("#borrar").parent().data("id")
+    BorrarDatos(id);
+    });
 }
 
 function CargaOK(resultData){
@@ -107,26 +125,3 @@ function CargaOK(resultData){
 
 
 });//cierre Document.ready
-// function getInformationByItem(){
-//   event.preventDefault();
-//   let item = $("#itemid").val();
-//   $.ajax({
-//      method: "GET",
-//      dataType: 'JSON',
-//      //si la info va en la URL o se pasa por "data" depende del servicio
-//      url: "https://web-unicen.herokuapp.com/api/thing/" + item,
-//      success: function(resultData){
-//        //al decir que dataType es JSON, ya resultData es un objeto
-//        let html = "";
-//        html += "Id: " + resultData.information['_id'] + "<br />";
-//        html += "Grupo: " + resultData.information['group'] + "<br />";
-//        html += "Informacion: " + resultData.information['thing'] + "<br />";
-//        html += "--------------------- </br>";
-//        $("#infoItem").html(html);
-//      },
-//      error:function(jqxml, status, errorThrown){
-//        console.log(errorThrown);
-//      }
-//
-//   });
-// }
