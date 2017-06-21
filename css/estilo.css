@@ -2,7 +2,10 @@
   color: violet;
 }
 
-#titulo1{
-  color: violet;
-  font-size: 20px;
+.page-header{
+  color: blue;
+}
+#guardar-info-auto{
+  background: violet;
+  border-color: black;
 }

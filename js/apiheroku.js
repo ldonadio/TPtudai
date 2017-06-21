@@ -1,9 +1,7 @@
 $( document ).ready(function() {
 "use strict";
 
-//cargaDatosInicial();
-
-$("#guardar-info-rapida").on("click", function(){
+$("#guardar-info-auto").on("click", function(){
   event.preventDefault();
   let ItemsInicio = 3;
   cargaDatosInicial(ItemsInicio);
@@ -11,11 +9,11 @@ $("#guardar-info-rapida").on("click", function(){
 
 function cargaDatosInicial(Items){
  for (var i = 0; i < Items; i++) {
-   let articulo = {cosa: "Pera"};
-   let precio = {costo: 123+i};
-   let lugar = {sitio: "Mercado"};
-   GuardarInformacion(articulo,precio,lugar);
- };
+    let articulo = {cosa: "Pera"};
+    let precio = {costo: 123+i};
+    let lugar = {sitio: "Mercado"};
+    GuardarInformacion(articulo,precio,lugar);
+    };
  }
 
 
@@ -26,8 +24,7 @@ $("#obtener-info").on("click", function(){
 });
 
 function TraerInfoGrupo(filas){
-  //event.preventDefault(); //Consultar porque inhabilita la carga de la tabla inicial?????????????????
-    let grupo = 101; //Se lo deja constante en el grupo de prueba $("#groupid").val();
+    let grupo = 6; //Grupo seleccionado a nombre de Leandro Donadio
     $.ajax({
        method: "GET",
        dataType: 'JSON',
@@ -49,23 +46,20 @@ $("#guardar-info").on("click", function(){
 });
 
 function GuardarInformacion(articulo,precio,lugar){
-//  event.preventDefault();
-  let grupo = 101; //grupo seleccionado de forma estatica antes estaba $("#grupo").val();
-  // let articulo = $("#articulo").val();
-  // let precio = $("#precio").val();
-  // let lugar = $("#lugar").val();
+  let grupo = 6; //grupo seleccionado de forma estatica antes estaba $("#grupo").val();
   let info = { //thing puede ser un objeto JSON con tanta información como queramos (en este servicio)
       group: grupo,
       thing: {"articulo": articulo.cosa, "precio": precio.costo, "lugar": lugar.sitio} //es un objeto JSON!
       };
-  if (grupo && articulo && precio){ //lugar considero que puede ser vacio
+  if ((info.thing[articulo]!="") && (info.thing[precio]!=""))
+  { //lugar considero que puede ser vacio
     $.ajax({
        method: "POST",
        dataType: 'JSON',
        //se debe serializar (stringify) la informacion (el "data:" de ida es de tipo string)
        data: JSON.stringify(info),
        contentType: "application/json; charset=utf-8",
-       url: "https://web-unicen.herokuapp.com/api/thing/",
+       url: "https://web-unicen.herokuapp.com/api/thing",
        success: CargaOK,
        error:function(jqxml, status, errorThrown){
          console.log(errorThrown);
@@ -77,21 +71,21 @@ function GuardarInformacion(articulo,precio,lugar){
   else
   {
     $("#guardarAlert").addClass("alert-danger")
-    $("#guardarAlert").html("Grupo e Informacion son campos requeridos");
+    $("#guardarAlert").html("Articulo y Precio son campos requeridos");
   }
 }
 
 function BorrarDatos(id) {
-    event.preventDefault();
     $.ajax({
       method: "DELETE",
       dataType: 'JSON',
       url:  "https://web-unicen.herokuapp.com/api/thing/"+id,
-      success: function(){$("#guardarAlert").html("Borrado Existoso");
+      success: function(){$("#guardarAlert").html("Borrado Exitoso");
                 $('tr[data-id="'+id+'"]').remove()},//Busca elemento del DOM con data-id = y lo remueve
-      error: $("#guardarAlert").html("Error por favor intente mas tarde")
+      error: function(){$("#guardarAlert").html("Error por favor intente mas tarde")}
     });
 }
+
 
 function mostrarDatosLista(data, filas){
   let ultimosItems = filas; //Muestra las ultimas XX lineas de datos cargados en el Server
@@ -101,22 +95,22 @@ function mostrarDatosLista(data, filas){
     html += "<td>" + data.information[i].thing['articulo'] + "</td>";
     html += "<td>" + data.information[i].thing['precio'] + "</td>";
     html += "<td>" + data.information[i].thing['lugar'] + "</td>";
-    html += "<td id='borrar'>  <a href="+'""#""'+" id='boton-borrar' onclick='return false;'><img src='imagenes/tacho.jpg'></a> </td> </tr>";
+    html += "<td id='borrar'>  <a href="+'"#"'+" id="+'boton-borrar'+"><img src='imagenes/tacho.jpg'></a></td></tr>";
  }
-  $("#datos").html(html);
+   $("#datos").html(html);
+   $("#boton-borrar").on("click", function(){
+     event.preventDefault();
+     let id = $("#borrar").parent().data("id")
+     BorrarDatos(id);
+     });
 
-  $("#boton-borrar").on("click", function(){
-    let id = $("#borrar").parent().data("id")
-    BorrarDatos(id);
-    });
 }
+
 
 function CargaOK(resultData){
   let filas = 3;
   $("#guardarAlert").removeClass("alert-danger")
   $("#guardarAlert").addClass("alert-success")
-  //como le dimos dataType:"JSON" el resultData ya es un objeto
-  //la estructura que devuelve es especifica de cada servicio que usemos
   $("#guardarAlert").html("Informacion guardada con fecha=" + resultData.information.dateAdded);
   TraerInfoGrupo(filas);
   console.log(datos);

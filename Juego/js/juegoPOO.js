@@ -6,7 +6,7 @@ alert("Donadio esta programando cuidado!");
 class Jugador {
   constructor(nombre) {
     this.nombre= nombre; //Se puede llamar variable igual que la clase?
-    this.credito=10;
+    this.credito=100;
     this.part_ganadas=0;
     }
   darNombre(nom_nuevo){
